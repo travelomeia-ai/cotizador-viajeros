@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cotizador — Viajeros en Alta Mar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy: #0a1628;
+  --navy-mid: #152238;
+  --ocean: #1a4a6b;
+  --wave: #2d7da8;
+  --foam: #e8f4f8;
+  --gold: #c9a84c;
+  --gold-light: #f0d98a;
+  --sand: #f5f0e8;
+  --white: #ffffff;
+  --text-dark: #0a1628;
+  --text-mid: #4a5568;
+  --text-light: #8a96a3;
+  --success: #1a7a5e;
+  --success-light: #e6f5f0;
+  --warn-light: #fef8ec;
+  --warn-border: #c9a84c;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 24px rgba(10,22,40,0.10);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--sand);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 60px;
+}
+
+/* HEADER */
+.header {
+  width: 100%;
+  background: var(--navy);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+.header-logo {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  font-size: 20px;
+  letter-spacing: 0.02em;
+}
+.header-sub {
+  color: rgba(255,255,255,0.45);
+  font-size: 12px;
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left: 1px solid rgba(255,255,255,0.15);
+}
+
+/* CONTAINER */
+.container {
+  width: 100%;
+  max-width: 600px;
+  padding: 0 20px;
+}
+
+/* PROGRESS */
+.progress-wrap {
+  margin-bottom: 28px;
+}
+.progress-bar {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.prog-seg {
+  flex: 1; height: 3px; border-radius: 2px;
+  background: rgba(10,22,40,0.12);
+  transition: background 0.4s;
+}
+.prog-seg.done { background: var(--gold); }
+.prog-seg.active { background: var(--wave); }
+.progress-label {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+/* CARD */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+.step-label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--wave);
+  margin-bottom: 8px;
+}
+.step-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: var(--navy);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+.step-sub {
+  font-size: 14px;
+  color: var(--text-mid);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+/* SECTION LABEL */
+.sec-label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-light);
+  margin: 20px 0 10px;
+}
+.sec-label:first-of-type { margin-top: 0; }
+
+/* OPTION GRID */
+.opt-grid {
+  display: grid;
+  gap: 10px;
+}
+.opt-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.opt-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.opt-card {
+  border: 1.5px solid rgba(10,22,40,0.12);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--white);
+}
+.opt-card:hover { border-color: var(--wave); background: var(--foam); }
+.opt-card.sel { border-color: var(--ocean); background: var(--foam); }
+.opt-card.sel .opt-title { color: var(--ocean); }
+
+.opt-icon {
+  font-size: 22px;
+  margin-bottom: 6px;
+  display: block;
+}
+.opt-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dark);
+  display: block;
+  margin-bottom: 2px;
+}
+.opt-sub {
+  font-size: 11px;
+  color: var(--text-light);
+  display: block;
+}
+
+/* PILL OPTIONS */
+.pill-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill {
+  padding: 7px 16px;
+  border-radius: 30px;
+  border: 1.5px solid rgba(10,22,40,0.15);
+  font-size: 13px;
+  cursor: pointer;
+  background: var(--white);
+  color: var(--text-mid);
+  transition: all 0.15s;
+}
+.pill:hover { border-color: var(--wave); color: var(--ocean); }
+.pill.sel { background: var(--ocean); border-color: var(--ocean); color: var(--white); font-weight: 500; }
+
+/* CHECK CARDS */
+.check-card {
+  border: 1.5px solid rgba(10,22,40,0.12);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  cursor: pointer;
+  background: var(--white);
+  transition: all 0.15s;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.check-card:hover { border-color: var(--wave); }
+.check-card.sel { border-color: var(--ocean); background: var(--foam); }
+.check-box {
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  border: 1.5px solid rgba(10,22,40,0.2);
+  flex-shrink: 0; margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  background: var(--white);
+}
+.check-card.sel .check-box { background: var(--ocean); border-color: var(--ocean); }
+.chk { display: none; }
+.check-card.sel .chk { display: block; }
+.cc-title { font-size: 14px; font-weight: 500; color: var(--text-dark); margin-bottom: 2px; }
+.cc-sub { font-size: 12px; color: var(--text-mid); line-height: 1.4; }
+.check-card.sel .cc-title { color: var(--ocean); }
+
+/* SUB PANEL */
+.sub-panel {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--sand);
+  border: 0.5px solid rgba(10,22,40,0.1);
+  display: none;
+}
+.sub-panel.open { display: block; }
+
+/* COUNTER */
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.count-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(10,22,40,0.2);
+  background: var(--white);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ocean);
+  transition: all 0.15s;
+  line-height: 1;
+}
+.count-btn:hover { background: var(--foam); border-color: var(--ocean); }
+.count-val { font-size: 20px; font-weight: 500; color: var(--navy); min-width: 24px; text-align: center; }
+
+/* INPUT */
+.field-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid rgba(10,22,40,0.15);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text-dark);
+  background: var(--white);
+  outline: none;
+  transition: border 0.15s;
+}
+.field-input:focus { border-color: var(--wave); }
+
+/* VISA ALERT */
+.visa-alert {
+  background: var(--warn-light);
+  border: 1px solid var(--warn-border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #6b5012;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.visa-ok {
+  background: var(--success-light);
+  border: 1px solid var(--success);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--success);
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* INFO BOX */
+.info-box {
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 12px 0;
+}
+.info-box.blue { background: var(--foam); color: var(--ocean); border-left: 3px solid var(--wave); }
+.info-box.gold { background: var(--warn-light); color: #6b5012; border-left: 3px solid var(--gold); }
+.info-box.green { background: var(--success-light); color: var(--success); border-left: 3px solid var(--success); }
+
+/* NAVIERA CARDS */
+.naviera-card {
+  border: 1.5px solid rgba(10,22,40,0.12);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 12px;
+  background: var(--white);
+  transition: border-color 0.2s;
+}
+.naviera-card.featured { border-color: var(--gold); }
+.naviera-name { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--navy); margin-bottom: 2px; }
+.naviera-ships { font-size: 12px; color: var(--text-light); margin-bottom: 10px; }
+.naviera-price { font-size: 22px; font-weight: 500; color: var(--ocean); }
+.naviera-price-sub { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+.tag { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 10px; margin: 2px; }
+.tag.inc { background: var(--success-light); color: var(--success); }
+.tag.ext { background: var(--foam); color: var(--ocean); }
+.tag.no { background: rgba(10,22,40,0.05); color: var(--text-light); text-decoration: line-through; }
+.badge-rec { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 10px; background: #fdf3d4; color: #8a6420; border: 1px solid var(--gold); }
+
+/* RESUMEN CHIPS */
+.res-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: 20px; font-size: 12px; margin: 3px; background: var(--foam); color: var(--ocean); border: 1px solid rgba(45,125,168,0.25); }
+.res-chip.gold { background: #fdf3d4; color: #7a5a1a; border-color: rgba(201,168,76,0.3); }
+
+/* PRÓXIMOS PASOS */
+.prox-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 0.5px solid rgba(10,22,40,0.08); }
+.prox-item:last-child { border-bottom: none; }
+.prox-num { width: 26px; height: 26px; border-radius: 50%; background: var(--foam); color: var(--ocean); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+.prox-title { font-size: 13px; font-weight: 500; color: var(--navy); margin-bottom: 2px; }
+.prox-sub { font-size: 12px; color: var(--text-mid); line-height: 1.4; }
+
+/* CALENDLY MOCK */
+.cal-wrap { border: 1px solid rgba(10,22,40,0.12); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; }
+.cal-head { background: var(--navy); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+.cal-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--gold); color: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; flex-shrink: 0; }
+.cal-name { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 2px; }
+.cal-detail { font-size: 12px; color: rgba(255,255,255,0.5); }
+.cal-body { padding: 20px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 16px; }
+.cal-dh { font-size: 10px; color: var(--text-light); text-align: center; padding: 3px 0; }
+.cal-d { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 12px; border-radius: 6px; cursor: pointer; color: var(--text-light); transition: all 0.15s; }
+.cal-d.avail { color: var(--text-dark); font-weight: 500; }
+.cal-d.avail:hover { background: var(--foam); color: var(--ocean); }
+.cal-d.sel-day { background: var(--ocean); color: var(--white); font-weight: 500; }
+.time-slot { border: 1.5px solid rgba(10,22,40,0.12); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 6px; font-size: 13px; color: var(--text-dark); cursor: pointer; transition: all 0.15s; display: flex; justify-content: space-between; align-items: center; }
+.time-slot:hover { border-color: var(--wave); background: var(--foam); }
+.time-slot.sel-time { background: var(--ocean); border-color: var(--ocean); color: var(--white); }
+.time-tz { font-size: 11px; color: var(--text-light); }
+.time-slot.sel-time .time-tz { color: rgba(255,255,255,0.7); }
+
+/* CONFIRM */
+.confirm-wrap { text-align: center; padding: 32px 20px; background: var(--success-light); border: 1px solid var(--success); border-radius: var(--radius); margin-bottom: 20px; display: none; }
+.confirm-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--success); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; }
+.confirm-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--success); margin-bottom: 6px; }
+.confirm-sub { font-size: 14px; color: #2a6b58; }
+
+/* BUTTONS */
+.btn-primary {
+  width: 100%;
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin-top: 20px;
+  letter-spacing: 0.01em;
+}
+.btn-primary:hover { background: var(--ocean); }
+.btn-primary:active { transform: scale(0.99); }
+.btn-secondary {
+  width: 100%;
+  background: var(--white);
+  color: var(--ocean);
+  border: 1.5px solid var(--ocean);
+  border-radius: var(--radius-sm);
+  padding: 13px 28px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 8px;
+}
+.btn-secondary:hover { background: var(--foam); }
+
+/* STEP WRAPPER */
+.step { display: none; }
+.step.active { display: block; }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.step.active .card { animation: fadeUp 0.3s ease; }
+
+/* DIVIDER */
+.divider { border: none; border-top: 0.5px solid rgba(10,22,40,0.08); margin: 16px 0; }
+
+/* FIELD GROUP */
+.field-group { margin-bottom: 12px; }
+.field-label { font-size: 12px; font-weight: 500; color: var(--text-mid); margin-bottom: 5px; }
+
+/* SKIP BADGE */
+.skip-badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 10px; background: rgba(10,22,40,0.07); color: var(--text-light); margin-left: 8px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-logo">Viajeros en Alta Mar</span>
+  <span class="header-sub">Cotizador de cruceros</span>
+</div>
+
+<div class="container">
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+    <div class="progress-label" id="prog-label"></div>
+  </div>
+
+  <!-- ===================== PASO 1 ===================== -->
+  <div class="step active" id="step-1">
+    <div class="card">
+      <div class="step-label">Paso 1</div>
+      <div class="step-title">¿Quién viaja?</div>
+      <div class="step-sub">Contanos sobre tu grupo para encontrar las mejores opciones.</div>
+
+      <div class="sec-label">Tipo de viaje</div>
+      <div class="opt-grid cols-2">
+        <div class="opt-card sel" onclick="solo1(this,'familiar')" id="tipo-familiar">
+          <span class="opt-icon">👨‍👩‍👧‍👦</span>
+          <span class="opt-title">Familiar</span>
+          <span class="opt-sub">Con menores a bordo</span>
+        </div>
+        <div class="opt-card" onclick="solo1(this,'pareja')" id="tipo-pareja">
+          <span class="opt-icon">💑</span>
+          <span class="opt-title">Pareja</span>
+          <span class="opt-sub">Romántico o de placer</span>
+        </div>
+        <div class="opt-card" onclick="solo1(this,'amigos')" id="tipo-amigos">
+          <span class="opt-icon">🥂</span>
+          <span class="opt-title">Amigos</span>
+          <span class="opt-sub">Grupo de adultos</span>
+        </div>
+        <div class="opt-card" onclick="solo1(this,'multigeneracional')" id="tipo-multi">
+          <span class="opt-icon">👴👩‍🦱🧒</span>
+          <span class="opt-title">Multigeneracional</span>
+          <span class="opt-sub">Varias generaciones</span>
+        </div>
+      </div>
+
+      <div class="sec-label">Adultos</div>
+      <div class="counter">
+        <button class="count-btn" onclick="cambiar('adultos',-1)">−</button>
+        <span class="count-val" id="val-adultos">2</span>
+        <button class="count-btn" onclick="cambiar('adultos',1)">+</button>
+        <span style="font-size:13px;color:var(--text-light);margin-left:4px;">personas</span>
+      </div>
+
+      <div id="menores-wrap">
+        <div class="sec-label" style="margin-top:16px;">Menores</div>
+        <div class="counter">
+          <button class="count-btn" onclick="cambiar('menores',-1)">−</button>
+          <span class="count-val" id="val-menores">0</span>
+          <button class="count-btn" onclick="cambiar('menores',1)">+</button>
+          <span style="font-size:13px;color:var(--text-light);margin-left:4px;">niños / adolescentes</span>
+        </div>
+        <div id="edades-menores" style="display:none;margin-top:12px;">
+          <div class="field-label">Edades de los menores (separadas por coma)</div>
+          <input class="field-input" type="text" placeholder="Ej: 5, 8, 14" id="input-edades"/>
+        </div>
+      </div>
+
+      <div class="sec-label">Motivo del viaje</div>
+      <div class="pill-wrap">
+        <div class="pill sel" onclick="soloP(this,'motivo')">Vacaciones</div>
+        <div class="pill" onclick="soloP(this,'motivo')">Luna de miel</div>
+        <div class="pill" onclick="soloP(this,'motivo')">Aniversario</div>
+        <div class="pill" onclick="soloP(this,'motivo')">Cumpleaños especial</div>
+        <div class="pill" onclick="soloP(this,'motivo')">Primera vez en crucero</div>
+      </div>
+
+      <button class="btn-primary" onclick="ir(2)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ===================== PASO 2 ===================== -->
+  <div class="step" id="step-2">
+    <div class="card">
+      <div class="step-label">Paso 2</div>
+      <div class="step-title">¿A dónde y cuándo?</div>
+      <div class="step-sub">Elegí tu destino soñado y el momento ideal para zarpar.</div>
+
+      <div class="sec-label">Destino</div>
+      <div class="opt-grid cols-3" id="dest-grid">
+        <div class="opt-card sel" onclick="selDest(this,'caribe')" data-dest="caribe">
+          <span class="opt-icon">🌴</span>
+          <span class="opt-title">Caribe</span>
+          <span class="opt-sub">Miami · San Juan</span>
+        </div>
+        <div class="opt-card" onclick="selDest(this,'mediterraneo')" data-dest="mediterraneo">
+          <span class="opt-icon">⛵</span>
+          <span class="opt-title">Mediterráneo</span>
+          <span class="opt-sub">Barcelona · Roma</span>
+        </div>
+        <div class="opt-card" onclick="selDest(this,'sudamerica')" data-dest="sudamerica">
+          <span class="opt-icon">🗺️</span>
+          <span class="opt-title">Sudamérica</span>
+          <span class="opt-sub">Bs. As. · Ushuaia</span>
+        </div>
+        <div class="opt-card" onclick="selDest(this,'europa_norte')" data-dest="europa_norte">
+          <span class="opt-icon">🏔️</span>
+          <span class="opt-title">Europa del Norte</span>
+          <span class="opt-sub">Fiordos · Islandia</span>
+        </div>
+        <div class="opt-card" onclick="selDest(this,'alaska')" data-dest="alaska">
+          <span class="opt-icon">🧊</span>
+          <span class="opt-title">Alaska</span>
+          <span class="opt-sub">Seattle · Vancouver</span>
+        </div>
+        <div class="opt-card" onclick="selDest(this,'otro')" data-dest="otro">
+          <span class="opt-icon">🌐</span>
+          <span class="opt-title">Otro</span>
+          <span class="opt-sub">Te ayudamos a explorar</span>
+        </div>
+      </div>
+
+      <div class="sec-label">Mes aproximado de salida</div>
+      <div class="pill-wrap" id="meses">
+        <div class="pill" onclick="soloP(this,'mes')">Ene</div>
+        <div class="pill" onclick="soloP(this,'mes')">Feb</div>
+        <div class="pill" onclick="soloP(this,'mes')">Mar</div>
+        <div class="pill" onclick="soloP(this,'mes')">Abr</div>
+        <div class="pill" onclick="soloP(this,'mes')">May</div>
+        <div class="pill" onclick="soloP(this,'mes')">Jun</div>
+        <div class="pill sel" onclick="soloP(this,'mes')">Jul</div>
+        <div class="pill" onclick="soloP(this,'mes')">Ago</div>
+        <div class="pill" onclick="soloP(this,'mes')">Sep</div>
+        <div class="pill" onclick="soloP(this,'mes')">Oct</div>
+        <div class="pill" onclick="soloP(this,'mes')">Nov</div>
+        <div class="pill" onclick="soloP(this,'mes')">Dic</div>
+        <div class="pill" onclick="soloP(this,'mes')">Soy flexible</div>
+      </div>
+
+      <div class="sec-label">Cantidad de noches</div>
+      <div class="pill-wrap">
+        <div class="pill" onclick="soloP(this,'noches')">3 a 4</div>
+        <div class="pill sel" onclick="soloP(this,'noches')">5 a 7</div>
+        <div class="pill" onclick="soloP(this,'noches')">8 a 12</div>
+        <div class="pill" onclick="soloP(this,'noches')">13 o más</div>
+      </div>
+
+      <div class="info-box gold" style="margin-top:16px;">
+        Cotizamos salidas para <strong>2026, 2027 y 2028</strong>. Si viajás en menos de 90 días, la disponibilidad es limitada.
+      </div>
+
+      <button class="btn-primary" onclick="ir(3)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ===================== PASO 3 — VISA (condicional) ===================== -->
+  <div class="step" id="step-3">
+    <div class="card">
+      <div class="step-label" id="step3-label">Paso 3</div>
+      <div class="step-title">¿Contás con Visa Americana?</div>
+      <div class="step-sub">Para cruceros que parten de o hacen escala en puertos de EE.UU. (como Miami o Nueva York) es requisito para todos los pasajeros.</div>
+
+      <div class="visa-alert">
+        <strong>¿Por qué importa?</strong> Destinos como el Caribe y Alaska generalmente salen o conectan por puertos americanos. Sin visa, algunas navieras no están disponibles.
+      </div>
+
+      <div class="sec-label">¿Todos los pasajeros cuentan con Visa Americana vigente?</div>
+      <div class="opt-grid cols-2">
+        <div class="opt-card" onclick="selVisa(this,'si')" id="visa-si">
+          <span class="opt-icon">✅</span>
+          <span class="opt-title">Sí, todos tenemos visa</span>
+          <span class="opt-sub">Acceso a todas las navieras</span>
+        </div>
+        <div class="opt-card" onclick="selVisa(this,'no')" id="visa-no">
+          <span class="opt-icon">🔄</span>
+          <span class="opt-title">No, no tenemos visa</span>
+          <span class="opt-sub">Te mostramos alternativas</span>
+        </div>
+      </div>
+
+      <div class="visa-ok" id="visa-ok-msg" style="display:none;">
+        Perfecto. Tenés acceso a todas las navieras disponibles para tu destino, incluyendo Royal Caribbean, Virgin Voyages, NCL y Disney.
+      </div>
+      <div id="visa-no-msg" style="display:none;">
+        <div class="info-box blue" style="margin-top:12px;">
+          Sin visa podemos ofrecerte cruceros que no incluyen escala en EE.UU. — por ejemplo MSC desde Europa o itinerarios por Sudamérica. En tu llamada te mostramos todas las opciones disponibles.
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="ir(4)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ===================== PASO 4 — SERVICIOS ===================== -->
+  <div class="step" id="step-4">
+    <div class="card">
+      <div class="step-label" id="step4-label">Paso 4</div>
+      <div class="step-title">¿Querés que resolvamos todo el viaje?</div>
+      <div class="step-sub">Seleccioná los servicios que querés sumar. Todo lo coordinamos en tu llamada.</div>
+
+      <div class="sec-label">Servicios adicionales</div>
+
+      <div class="check-card sel" onclick="toggleCC(this,'vuelos')">
+        <div class="check-box"><svg class="chk" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div style="flex:1">
+          <div class="cc-title">Vuelos desde mi ciudad</div>
+          <div class="cc-sub">Te generamos un link con las mejores opciones en Google Flights para tu fecha y ruta</div>
+          <div class="sub-panel open" id="panel-vuelos">
+            <div class="field-label">¿Desde qué ciudad salís?</div>
+            <input class="field-input" type="text" placeholder="Ej: Buenos Aires, Córdoba, Montevideo..." id="input-ciudad"/>
+            <div style="font-size:11px;color:var(--text-light);margin-top:6px;">Recibís el link de Google Flights ya armado con tu ruta y fecha al terminar el cotizador.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-card sel" onclick="toggleCC(this,'hotel')">
+        <div class="check-box"><svg class="chk" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div style="flex:1">
+          <div class="cc-title">Estadía pre/post crucero</div>
+          <div class="cc-sub">Muy recomendado llegar un día antes y quedarse uno después</div>
+          <div class="sub-panel open" id="panel-hotel">
+            <div class="field-label" style="margin-bottom:8px;">¿Cuántas noches necesitás?</div>
+            <div class="pill-wrap" style="margin-bottom:12px;">
+              <div class="pill sel" onclick="soloP(this,'noches-hotel')">1 noche</div>
+              <div class="pill" onclick="soloP(this,'noches-hotel')">2 noches</div>
+              <div class="pill" onclick="soloP(this,'noches-hotel')">3 o más</div>
+            </div>
+            <div class="field-label" style="margin-bottom:8px;">Presupuesto por noche</div>
+            <div class="pill-wrap">
+              <div class="pill" onclick="soloP(this,'precio-hotel')">Hasta USD 100</div>
+              <div class="pill sel" onclick="soloP(this,'precio-hotel')">USD 100–200</div>
+              <div class="pill" onclick="soloP(this,'precio-hotel')">USD 200+</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-card" onclick="toggleCC(this,'traslados')">
+        <div class="check-box"><svg class="chk" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="cc-title">Traslados aeropuerto · hotel · puerto</div>
+          <div class="cc-sub">Coordinamos el transporte para que no tengas que preocuparte por nada</div>
+        </div>
+      </div>
+
+      <div class="check-card" onclick="toggleCC(this,'excursiones')">
+        <div class="check-box"><svg class="chk" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="cc-title">Excursiones en puertos de parada</div>
+          <div class="cc-sub">Tours y actividades en cada destino del itinerario</div>
+        </div>
+      </div>
+
+      <div class="sec-label">Experiencia a bordo</div>
+
+      <div class="check-card" onclick="toggleCC(this,'bebidas')">
+        <div class="check-box"><svg class="chk" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div style="flex:1">
+          <div class="cc-title">Paquete de bebidas a bordo</div>
+          <div class="cc-sub">Disponible según naviera — lo vemos juntos en tu llamada</div>
+          <div class="sub-panel" id="panel-bebidas">
+            <div class="info-box green" style="margin:0;">
+              ¡Buena elección! El precio del paquete varía según la naviera que elijas — por eso lo cotizamos juntos en tu llamada, así sabés exactamente qué incluye y cuánto sale antes de decidir.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="ir(5)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ===================== PASO 5 — COTIZACIÓN ===================== -->
+  <div class="step" id="step-5">
+    <div class="card">
+      <div class="step-label" id="step5-label">Paso 5</div>
+      <div class="step-title">Tu viaje, armado por vos</div>
+      <div class="step-sub">Esto es lo que encontramos según tus preferencias. En tu llamada lo confirmamos y personalizamos.</div>
+
+      <div style="background:var(--sand);border-radius:var(--radius-sm);padding:14px;margin-bottom:20px;">
+        <div class="field-label" style="margin-bottom:8px;">Tu selección</div>
+        <div id="resumen-chips"></div>
+      </div>
+
+      <div class="field-label" style="margin-bottom:12px;text-transform:uppercase;letter-spacing:0.08em;font-size:11px;">Navieras que aplican para tu viaje</div>
+
+      <div id="navieras-container"></div>
+
+      <div class="info-box gold">
+        Precios orientativos en base a tarifas vigentes para cabina balcón doble. El precio final se confirma en tu llamada con Rocío y Matías según disponibilidad real.
+      </div>
+
+      <hr class="divider"/>
+
+      <div class="field-label" style="margin-bottom:12px;font-size:13px;color:var(--text-dark);font-weight:500;">¿Seguimos? Dejanos tus datos y agendamos tu llamada.</div>
+
+      <div class="field-group">
+        <div class="field-label">Nombre y apellido</div>
+        <input class="field-input" type="text" placeholder="Tu nombre completo" id="input-nombre"/>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Correo electrónico</div>
+        <input class="field-input" type="email" placeholder="tu@email.com" id="input-email"/>
+      </div>
+      <div class="field-group">
+        <div class="field-label">WhatsApp</div>
+        <input class="field-input" type="tel" placeholder="+54 9 11 xxxx xxxx" id="input-tel"/>
+      </div>
+
+      <button class="btn-primary" onclick="enviarDatos()">Agendar mi llamada con Rocío y Matías →</button>
+      <button class="btn-secondary" onclick="alert('📩 Te enviamos la cotización por email. ¡Revisá tu casilla!')">Recibir esta cotización por email</button>
+    </div>
+  </div>
+
+  <!-- ===================== PASO 6 — CALENDLY ===================== -->
+  <div class="step" id="step-6">
+    <div class="card">
+      <div class="step-label">¡Último paso!</div>
+      <div class="step-title">Agendá tu llamada con nosotros</div>
+      <div class="step-sub">Elegí el día y el horario que mejor te quede. La llamada dura aproximadamente 30 minutos y es sin compromiso.</div>
+
+      <div class="cal-wrap" id="cal-section">
+        <div class="cal-head">
+          <div class="cal-avatar">RM</div>
+          <div>
+            <div class="cal-name">Rocío y Matías</div>
+            <div class="cal-detail">Viajeros en Alta Mar · 30 min · Video o WhatsApp</div>
+          </div>
+        </div>
+        <div class="cal-body">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <span style="font-size:13px;font-weight:500;color:var(--navy);">Mayo 2026</span>
+            <div style="display:flex;gap:6px;">
+              <button style="background:none;border:1px solid rgba(10,22,40,0.15);border-radius:6px;width:28px;height:28px;cursor:pointer;color:var(--text-mid);font-size:14px;">‹</button>
+              <button style="background:none;border:1px solid rgba(10,22,40,0.15);border-radius:6px;width:28px;height:28px;cursor:pointer;color:var(--text-mid);font-size:14px;">›</button>
+            </div>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-dh">Lu</div><div class="cal-dh">Ma</div><div class="cal-dh">Mi</div><div class="cal-dh">Ju</div><div class="cal-dh">Vi</div><div class="cal-dh">Sá</div><div class="cal-dh">Do</div>
+            <div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d avail" onclick="selDay(this)">1</div><div class="cal-d avail" onclick="selDay(this)">2</div><div class="cal-d">3</div><div class="cal-d">4</div>
+            <div class="cal-d avail" onclick="selDay(this)">5</div><div class="cal-d avail" onclick="selDay(this)">6</div><div class="cal-d avail" onclick="selDay(this)">7</div><div class="cal-d avail" onclick="selDay(this)">8</div><div class="cal-d avail" onclick="selDay(this)">9</div><div class="cal-d">10</div><div class="cal-d">11</div>
+            <div class="cal-d avail" onclick="selDay(this)">12</div><div class="cal-d avail sel-day" onclick="selDay(this)">13</div><div class="cal-d avail" onclick="selDay(this)">14</div><div class="cal-d avail" onclick="selDay(this)">15</div><div class="cal-d avail" onclick="selDay(this)">16</div><div class="cal-d">17</div><div class="cal-d">18</div>
+            <div class="cal-d avail" onclick="selDay(this)">19</div><div class="cal-d avail" onclick="selDay(this)">20</div><div class="cal-d avail" onclick="selDay(this)">21</div><div class="cal-d avail" onclick="selDay(this)">22</div><div class="cal-d avail" onclick="selDay(this)">23</div><div class="cal-d">24</div><div class="cal-d">25</div>
+          </div>
+          <div class="field-label" style="margin-bottom:8px;">Horarios disponibles — martes 13 de mayo</div>
+          <div class="time-slot" onclick="selTime(this)"><span>10:00 AM</span><span class="time-tz">Argentina (GMT-3)</span></div>
+          <div class="time-slot" onclick="selTime(this)"><span>11:30 AM</span><span class="time-tz">Argentina (GMT-3)</span></div>
+          <div class="time-slot sel-time" onclick="selTime(this)"><span>3:00 PM</span><span class="time-tz">Seleccionado</span></div>
+          <div class="time-slot" onclick="selTime(this)"><span>5:00 PM</span><span class="time-tz">Argentina (GMT-3)</span></div>
+          <button class="btn-primary" onclick="confirmar()">Confirmar — martes 13 de mayo a las 3:00 PM</button>
+        </div>
+      </div>
+
+      <div class="confirm-wrap" id="confirm-panel">
+        <div class="confirm-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M6 14L11 19L22 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="confirm-title">¡Listo! Tu llamada está agendada</div>
+        <div class="confirm-sub" style="margin-bottom:4px;">Martes 13 de mayo · 3:00 PM (Argentina)</div>
+        <div class="confirm-sub">Te mandamos la confirmación por email con el link de la videollamada.</div>
+      </div>
+
+      <div style="background:var(--sand);border-radius:var(--radius);padding:16px 20px;">
+        <div class="field-label" style="text-transform:uppercase;letter-spacing:0.08em;font-size:11px;margin-bottom:8px;">Qué pasa ahora</div>
+        <div class="prox-item">
+          <div class="prox-num">1</div>
+          <div><div class="prox-title">Recibís un email de confirmación</div><div class="prox-sub">Con el resumen de tu cotización y el link de Google Flights para tus vuelos</div></div>
+        </div>
+        <div class="prox-item">
+          <div class="prox-num">2</div>
+          <div><div class="prox-title">Nosotros revisamos tu perfil antes de la llamada</div><div class="prox-sub">Llegamos preparados con opciones concretas para tu destino, fecha y presupuesto</div></div>
+        </div>
+        <div class="prox-item">
+          <div class="prox-num">3</div>
+          <div><div class="prox-title">En la llamada confirmamos precios y disponibilidad real</div><div class="prox-sub">Sin sorpresas. Sin apuro. Con toda la info sobre la mesa.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// STATE
+const state = {
+  paso: 1,
+  totalPasos: 6,
+  dest: 'caribe',
+  visa: null,
+  adultos: 2,
+  menores: 0,
+};
+
+const NAVIERAS = {
+  caribe: {
+    conVisa: [
+      { name:'Virgin Voyages', ships:'Scarlet Lady · Resilient Lady', precio:'desde USD 1.800', featured:true, tags:['inc:Bebidas básicas inc.','inc:Wifi incluido','inc:Propinas incluidas','ext:Solo adultos +18'] },
+      { name:'Royal Caribbean', ships:'Harmony · Wonder of the Seas', precio:'desde USD 1.200', tags:['inc:Entretenimiento inc.','inc:Piscinas y parques','no:Bebidas no incluidas','no:Wifi no incluido'] },
+      { name:'Norwegian Cruise Line', ships:'Norwegian Encore · Prima', precio:'desde USD 1.350', tags:['inc:Freestyle dining','ext:Free at Sea disponible','no:Bebidas no incluidas'] },
+      { name:'Disney Cruise Line', ships:'Disney Wish · Fantasy', precio:'desde USD 2.200', tags:['inc:Entretenimiento Disney','inc:Piscinas temáticas','no:Bebidas no incluidas'] },
+    ],
+    sinVisa: [
+      { name:'MSC Cruceros', ships:'MSC Seashore · Virtuosa', precio:'desde USD 900', tags:['inc:Entretenimiento inc.','ext:Paquete todo incluido disponible','no:Bebidas no incluidas'] },
+    ]
+  },
+  alaska: {
+    conVisa: [
+      { name:'Royal Caribbean', ships:'Ovation · Radiance of the Seas', precio:'desde USD 1.400', tags:['inc:Entretenimiento inc.','no:Bebidas no incluidas'] },
+      { name:'Princess Cruises', ships:'Discovery Princess · Majestic', precio:'desde USD 1.300', tags:['inc:Princess Plus disponible','no:Bebidas no incluidas'] },
+      { name:'Norwegian Cruise Line', ships:'Norwegian Bliss · Encore', precio:'desde USD 1.350', tags:['inc:Freestyle dining','ext:Free at Sea disponible'] },
+    ],
+    sinVisa: [
+      { name:'Sin opciones disponibles para Alaska sin visa americana', ships:'', precio:'—', noOp:true, tags:[] },
+    ]
+  },
+  mediterraneo: [
+    { name:'Virgin Voyages', ships:'Valiant Lady · Resilient Lady', precio:'desde USD 1.600', featured:true, tags:['inc:Bebidas básicas inc.','inc:Wifi incluido','inc:Propinas incluidas'] },
+    { name:'MSC Cruceros', ships:'MSC Seashore · Grandiosa', precio:'desde USD 900', tags:['inc:Entretenimiento inc.','no:Bebidas no incluidas'] },
+    { name:'Royal Caribbean', ships:'Wonder · Odyssey of the Seas', precio:'desde USD 1.100', tags:['inc:Entretenimiento inc.','no:Bebidas no incluidas'] },
+    { name:'Norwegian Cruise Line', ships:'Norwegian Getaway · Epic', precio:'desde USD 1.200', tags:['inc:Freestyle dining','ext:Free at Sea disponible'] },
+    { name:'Princess Cruises', ships:'Sky Princess · Regal Princess', precio:'desde USD 1.150', tags:['inc:Princess Plus disponible','no:Bebidas no incluidas'] },
+  ],
+  sudamerica: [
+    { name:'MSC Cruceros', ships:'MSC Seaview · Musica', precio:'desde USD 850', featured:true, tags:['inc:Salida desde Buenos Aires','inc:Entretenimiento inc.','no:Bebidas no incluidas'] },
+    { name:'Princess Cruises', ships:'Crown Princess · Coral Princess', precio:'desde USD 1.100', tags:['inc:Princess Plus disponible','no:Bebidas no incluidas'] },
+  ],
+  europa_norte: [
+    { name:'Royal Caribbean', ships:'Adventure · Explorer of the Seas', precio:'desde USD 1.500', tags:['inc:Entretenimiento inc.','no:Bebidas no incluidas'] },
+    { name:'Norwegian Cruise Line', ships:'Norwegian Escape · Jade', precio:'desde USD 1.400', tags:['inc:Freestyle dining','ext:Free at Sea disponible'] },
+    { name:'Princess Cruises', ships:'Island Princess · Pacific Princess', precio:'desde USD 1.350', tags:['inc:Princess Plus disponible'] },
+  ],
+  otro: [
+    { name:'A definir según tu destino', ships:'Lo exploramos juntos en tu llamada', precio:'Consultar', tags:['ext:Asesoramiento personalizado'] },
+  ],
+};
+
+const DEST_VISA = ['caribe','alaska'];
+
+function getNavieras() {
+  const d = state.dest;
+  if (DEST_VISA.includes(d)) {
+    const nav = NAVIERAS[d];
+    return state.visa === 'no' ? nav.sinVisa : nav.conVisa;
+  }
+  return NAVIERAS[d] || [];
+}
+
+// NAVIGATION
+function ir(paso) {
+  const visaNecesaria = DEST_VISA.includes(state.dest);
+  if (paso === 3 && !visaNecesaria) {
+    paso = 4;
+    state.totalPasos = 5;
+  } else {
+    state.totalPasos = 6;
+  }
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + paso).classList.add('active');
+  state.paso = paso;
+  actualizarProg();
+  actualizarLabels();
+  if (paso === 5) renderPaso5();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function actualizarProg() {
+  const bar = document.getElementById('prog-bar');
+  const total = state.totalPasos;
+  bar.innerHTML = '';
+  for (let i = 1; i <= total; i++) {
+    const seg = document.createElement('div');
+    seg.className = 'prog-seg' + (i < state.paso ? ' done' : i === state.paso ? ' active' : '');
+    bar.appendChild(seg);
+  }
+  document.getElementById('prog-label').textContent = `Paso ${state.paso} de ${total}`;
+}
+
+function actualizarLabels() {
+  const visaNecesaria = DEST_VISA.includes(state.dest);
+  const offset = visaNecesaria ? 0 : -1;
+  const s4 = document.getElementById('step4-label');
+  const s5 = document.getElementById('step5-label');
+  if (s4) s4.textContent = visaNecesaria ? 'Paso 4' : 'Paso 3';
+  if (s5) s5.textContent = visaNecesaria ? 'Paso 5' : 'Paso 4';
+}
+
+// INTERACCIONES PASO 1
+function solo1(el, grupo) {
+  document.querySelectorAll('#step-1 .opt-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  const tieneVirgin = grupo === 'familiar';
+}
+
+function cambiar(key, delta) {
+  state[key] = Math.max(0, state[key] + delta);
+  if (key === 'adultos') state[key] = Math.max(1, state[key]);
+  document.getElementById('val-' + key).textContent = state[key];
+  if (key === 'menores') {
+    document.getElementById('edades-menores').style.display = state.menores > 0 ? 'block' : 'none';
+  }
+}
+
+// DESTINO
+function selDest(el, dest) {
+  document.querySelectorAll('#dest-grid .opt-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  state.dest = dest;
+}
+
+// VISA
+function selVisa(el, val) {
+  document.querySelectorAll('#step-3 .opt-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  state.visa = val;
+  document.getElementById('visa-ok-msg').style.display = val === 'si' ? 'block' : 'none';
+  document.getElementById('visa-no-msg').style.display = val === 'no' ? 'block' : 'none';
+}
+
+// PILLS
+function soloP(el, grupo) {
+  const parent = el.closest('.pill-wrap');
+  if (!parent) return;
+  parent.querySelectorAll('.pill').forEach(p => p.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+// CHECK CARDS
+function toggleCC(el, id) {
+  el.classList.toggle('sel');
+  const panel = document.getElementById('panel-' + id);
+  if (panel) panel.classList.toggle('open', el.classList.contains('sel'));
+}
+
+// CALENDLY
+function selDay(el) {
+  document.querySelectorAll('.cal-d').forEach(d => d.classList.remove('sel-day'));
+  el.classList.add('sel-day');
+}
+function selTime(el) {
+  document.querySelectorAll('.time-slot').forEach(t => {
+    t.classList.remove('sel-time');
+    const tz = t.querySelector('.time-tz');
+    if (tz && tz.textContent === 'Seleccionado') tz.textContent = 'Argentina (GMT-3)';
+  });
+  el.classList.add('sel-time');
+  el.querySelector('.time-tz').textContent = 'Seleccionado';
+}
+function confirmar() {
+  document.getElementById('cal-section').style.display = 'none';
+  document.getElementById('confirm-panel').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// RENDER PASO 5
+function renderPaso5() {
+  // Resumen
+  const chips = document.getElementById('resumen-chips');
+  const dest = document.querySelector('#dest-grid .sel');
+  const mes = document.querySelector('#meses .sel');
+  const noches = document.querySelector('#step-2 .pill-wrap:nth-of-type(3) .sel, [data-noches].sel');
+  const destLabel = dest ? dest.querySelector('.opt-title').textContent : state.dest;
+  const mesLabel = mes ? mes.textContent : '—';
+
+  let html = '';
+  html += `<span class="res-chip gold">${destLabel}</span>`;
+  html += `<span class="res-chip gold">${mesLabel} 2026</span>`;
+  html += `<span class="res-chip gold">${state.adultos} adulto${state.adultos>1?'s':''}</span>`;
+  if (state.menores > 0) html += `<span class="res-chip gold">${state.menores} menor${state.menores>1?'es':''}</span>`;
+
+  const ciudad = document.getElementById('input-ciudad').value;
+  if (ciudad) html += `<span class="res-chip">Vuelos desde ${ciudad}</span>`;
+  if (document.querySelector('#panel-hotel').classList.contains('open')) {
+    const precioHotel = document.querySelector('.pill.sel[onclick*="precio-hotel"]');
+    html += `<span class="res-chip">Hotel · ${precioHotel ? precioHotel.textContent : 'USD 100-200'}/noche</span>`;
+  }
+  if (document.getElementById('panel-bebidas').classList.contains('open')) {
+    html += `<span class="res-chip">Paquete de bebidas</span>`;
+  }
+  chips.innerHTML = html;
+
+  // Navieras
+  const nav = getNavieras();
+  const cont = document.getElementById('navieras-container');
+  cont.innerHTML = nav.map(n => {
+    if (n.noOp) return `<div class="info-box blue">${n.name}</div>`;
+    const tagsHtml = n.tags.map(t => {
+      const [type, label] = t.split(':');
+      return `<span class="tag ${type}">${label}</span>`;
+    }).join('');
+    return `
+      <div class="naviera-card ${n.featured ? 'featured' : ''}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+          <div>
+            <div class="naviera-name">${n.name}</div>
+            <div class="naviera-ships">${n.ships}</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="naviera-price">${n.precio}</div>
+            <div class="naviera-price-sub">por persona · tarifa base</div>
+          </div>
+        </div>
+        <div>${tagsHtml}</div>
+        ${n.featured ? '<div style="margin-top:10px;"><span class="badge-rec">Nuestra recomendada</span></div>' : ''}
+        <div style="font-size:11px;color:var(--text-light);margin-top:8px;">Precio orientativo · sujeto a disponibilidad</div>
+      </div>`;
+  }).join('');
+}
+
+
+// ── API CONFIG ───────────────────────────────────────────────
+const API_URL = "https://script.google.com/macros/s/AKfycbzNAUGkpOFp9XMfYr-4Wn4IzwJRcu0Gx8PQ91Vay35pwHt_PAxCLUfc_BXJ5GjMpHrvBg/exec";
+
+async function enviarDatos() {
+  const nombre  = document.getElementById('input-nombre').value.trim();
+  const email   = document.getElementById('input-email').value.trim();
+  const tel     = document.getElementById('input-tel').value.trim();
+
+  if (!nombre || !email) {
+    alert('Por favor completá tu nombre y email para continuar.');
+    return;
+  }
+
+  const dest    = document.querySelector('#dest-grid .sel');
+  const mes     = document.querySelector('#meses .sel');
+  const noches  = document.querySelector('#step-2 .pill-wrap .pill.sel:last-of-type');
+  const tipoGrupo = document.querySelector('#step-1 .opt-card.sel .opt-title');
+  const precioHotel = document.querySelector('.pill.sel[onclick*="precio-hotel"]');
+  const nochesHotel = document.querySelector('#noches-hotel .pill.sel');
+  const navieraEl = document.querySelector('.naviera-card.featured .naviera-name') ||
+                    document.querySelector('.naviera-card .naviera-name');
+
+  const datos = {
+    nombre,
+    email,
+    whatsapp:          tel,
+    destino:           dest ? dest.querySelector('.opt-title').textContent : state.dest,
+    mes:               mes ? mes.textContent : '—',
+    noches:            (() => { const pills = document.querySelectorAll('#step-2 .pill-wrap'); for(const pw of pills){ const s=pw.querySelector('.pill.sel'); if(s && ['3 a 4','5 a 7','8 a 12','13 o más'].some(v=>s.textContent.includes(v.split(' ')[0]))) return s.textContent; } return '—'; })(),
+    adultos:           state.adultos,
+    menores:           state.menores,
+    tipoGrupo:         tipoGrupo ? tipoGrupo.textContent : '—',
+    visa:              state.visa || '—',
+    ciudadOrigen:      document.getElementById('input-ciudad').value.trim(),
+    quiereVuelos:      document.querySelector('#panel-vuelos').classList.contains('open'),
+    quiereHotel:       document.querySelector('#panel-hotel').classList.contains('open'),
+    hotelNoches:       nochesHotel ? nochesHotel.textContent : '',
+    hotelPrecio:       precioHotel ? precioHotel.textContent : '',
+    quiereTraslados:   document.querySelector('[onclick*="traslados"]')?.classList.contains('sel') || false,
+    quiereExcursiones: document.querySelector('[onclick*="excursiones"]')?.classList.contains('sel') || false,
+    quiereBebidas:     document.querySelector('#panel-bebidas').classList.contains('open'),
+    navieraConsultada: navieraEl ? navieraEl.textContent : '—',
+    llamadaAgendada:   false,
+    linkCalendly:      'https://calendly.com/viajerosenaltamar',
+  };
+
+  const btn = document.querySelector('#step-5 .btn-primary');
+  btn.textContent = 'Enviando...';
+  btn.disabled = true;
+
+  try {
+    await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify(datos),
+      headers: { 'Content-Type': 'application/json' },
+      mode: 'no-cors',
+    });
+  } catch(e) {
+    console.log('API error:', e);
+  }
+
+  btn.textContent = 'Agendar mi llamada con Rocío y Matías →';
+  btn.disabled = false;
+  ir(6);
+}
+
+// INIT
+actualizarProg();
+actualizarLabels();
+</script>
+</body>
+</html>

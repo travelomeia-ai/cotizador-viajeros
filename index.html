@@ -468,10 +468,10 @@ body {
           <span class="opt-title">Amigos</span>
           <span class="opt-sub">Grupo de adultos</span>
         </div>
-        <div class="opt-card" onclick="solo1(this,'multigeneracional')" id="tipo-multi">
-          <span class="opt-icon">👴👩‍🦱🧒</span>
-          <span class="opt-title">Multigeneracional</span>
-          <span class="opt-sub">Varias generaciones</span>
+        <div class="opt-card" onclick="solo1(this,'solo')" id="tipo-solo">
+          <span class="opt-icon">🧳</span>
+          <span class="opt-title">Viaje Solo</span>
+          <span class="opt-sub">Solo un pasajero</span>
         </div>
       </div>
 
@@ -936,10 +936,34 @@ function irAtras(pasoActual) {
 }
 
 // INTERACCIONES PASO 1
-function solo1(el, grupo) {
+function solo1(el, tipo) {
   document.querySelectorAll('#step-1 .opt-card').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
-  const tieneVirgin = grupo === 'familiar';
+  state.tipoViaje = tipo;
+
+  if (tipo === 'solo') {
+    // Force 1 adult, disable buttons
+    state.adultos = 1;
+    document.getElementById('val-adultos').textContent = '1';
+    document.querySelectorAll('.count-btn').forEach(btn => {
+      btn.style.opacity = '0.3';
+      btn.style.pointerEvents = 'none';
+    });
+    // Hide menores section
+    document.getElementById('menores-wrap').style.display = 'none';
+  } else {
+    // Re-enable buttons
+    document.querySelectorAll('.count-btn').forEach(btn => {
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+    });
+    document.getElementById('menores-wrap').style.display = 'block';
+    // If coming from solo, reset to 2 adults
+    if (state.adultos < 2) {
+      state.adultos = 2;
+      document.getElementById('val-adultos').textContent = '2';
+    }
+  }
 }
 
 function cambiar(key, delta) {

@@ -388,6 +388,24 @@ body {
   margin-top: 8px;
 }
 .btn-secondary:hover { background: var(--foam); }
+.btn-back {
+  width: 100%;
+  background: transparent;
+  color: var(--text-mid);
+  border: 1px solid rgba(10,22,40,0.15);
+  border-radius: var(--radius-sm);
+  padding: 11px 28px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.btn-back:hover { background: var(--foam); color: var(--ocean); border-color: var(--ocean); }
 
 /* STEP WRAPPER */
 .step { display: none; }
@@ -563,6 +581,7 @@ body {
       </div>
 
       <button class="btn-primary" onclick="ir(3)">Continuar →</button>
+      <button class="btn-back" onclick="ir(1)">← Volver al paso anterior</button>
     </div>
   </div>
 
@@ -596,11 +615,12 @@ body {
       </div>
       <div id="visa-no-msg" style="display:none;">
         <div class="info-box blue" style="margin-top:12px;">
-          Sin visa podemos ofrecerte cruceros que no incluyen escala en EE.UU. — por ejemplo MSC desde Europa o itinerarios por Sudamérica. En tu llamada te mostramos todas las opciones disponibles.
+          ¡No hay problema! Tenemos opciones increíbles sin visa americana. Por ejemplo, cruceros por el Caribe con salidas desde Panamá y Cartagena con Royal Caribbean — sin necesidad de tocar puerto de EE.UU. En tu llamada con nosotros te mostramos todas las alternativas disponibles para que puedas vivir el viaje que soñás.
         </div>
       </div>
 
       <button class="btn-primary" onclick="ir(4)">Continuar →</button>
+      <button class="btn-back" onclick="irAtras(3)">← Volver al paso anterior</button>
     </div>
   </div>
 
@@ -680,6 +700,7 @@ body {
       </div>
 
       <button class="btn-primary" onclick="ir(5)">Continuar →</button>
+      <button class="btn-back" onclick="irAtras(4)">← Volver al paso anterior</button>
     </div>
   </div>
 
@@ -722,6 +743,7 @@ body {
 
       <button class="btn-primary" onclick="enviarDatos()">Agendar mi llamada con Rocío y Matías →</button>
       <button class="btn-secondary" onclick="alert('📩 Te enviamos la cotización por email. ¡Revisá tu casilla!')">Recibir esta cotización por email</button>
+      <button class="btn-back" onclick="irAtras(5)">← Volver al paso anterior</button>
     </div>
   </div>
 
@@ -890,11 +912,27 @@ function actualizarProg() {
 
 function actualizarLabels() {
   const visaNecesaria = DEST_VISA.includes(state.dest);
-  const offset = visaNecesaria ? 0 : -1;
   const s4 = document.getElementById('step4-label');
   const s5 = document.getElementById('step5-label');
   if (s4) s4.textContent = visaNecesaria ? 'Paso 4' : 'Paso 3';
   if (s5) s5.textContent = visaNecesaria ? 'Paso 5' : 'Paso 4';
+}
+
+function irAtras(pasoActual) {
+  const visaNecesaria = DEST_VISA.includes(state.dest);
+  // Map current display step to previous
+  let anterior;
+  if (pasoActual === 3) anterior = 2;      // visa → destino
+  else if (pasoActual === 4) anterior = visaNecesaria ? 3 : 2; // servicios → visa o destino
+  else if (pasoActual === 5) anterior = 4; // cabina → servicios
+  else if (pasoActual === 6) anterior = 5; // cotizacion → cabina
+  else anterior = pasoActual - 1;
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + anterior).classList.add('active');
+  state.paso = anterior;
+  actualizarProg();
+  actualizarLabels();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // INTERACCIONES PASO 1
@@ -931,9 +969,9 @@ function selVisa(el, val) {
 
 // PILLS
 function soloP(el, grupo) {
-  const parent = el.closest('.pill-wrap');
-  if (!parent) return;
-  parent.querySelectorAll('.pill').forEach(p => p.classList.remove('sel'));
+  // Find all pills with same grupo within same container
+  const allPills = document.querySelectorAll(`.pill[onclick*="${grupo}"]`);
+  allPills.forEach(p => p.classList.remove('sel'));
   el.classList.add('sel');
 }
 
@@ -942,6 +980,17 @@ function toggleCC(el, id) {
   el.classList.toggle('sel');
   const panel = document.getElementById('panel-' + id);
   if (panel) panel.classList.toggle('open', el.classList.contains('sel'));
+}
+
+function selNaviera(el, nombre) {
+  document.querySelectorAll('.naviera-card').forEach(c => {
+    c.style.borderColor = '';
+    c.style.boxShadow = '';
+  });
+  el.style.borderColor = 'var(--ocean)';
+  el.style.boxShadow = '0 0 0 2px rgba(26,74,107,0.15)';
+  // Store selection for API
+  window._navieraSeleccionada = nombre;
 }
 
 // CALENDLY
@@ -994,14 +1043,14 @@ function renderPaso5() {
   // Navieras
   const nav = getNavieras();
   const cont = document.getElementById('navieras-container');
-  cont.innerHTML = nav.map(n => {
+  cont.innerHTML = nav.map((n, idx) => {
     if (n.noOp) return `<div class="info-box blue">${n.name}</div>`;
     const tagsHtml = n.tags.map(t => {
       const [type, label] = t.split(':');
       return `<span class="tag ${type}">${label}</span>`;
     }).join('');
     return `
-      <div class="naviera-card ${n.featured ? 'featured' : ''}">
+      <div class="naviera-card ${n.featured ? 'featured' : ''}" onclick="selNaviera(this, '${n.name}')" style="cursor:pointer;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
           <div>
             <div class="naviera-name">${n.name}</div>
@@ -1017,6 +1066,9 @@ function renderPaso5() {
         <div style="font-size:11px;color:var(--text-light);margin-top:8px;">Precio orientativo · sujeto a disponibilidad</div>
       </div>`;
   }).join('');
+  // Auto-select featured or first
+  const firstCard = cont.querySelector('.naviera-card');
+  if (firstCard) selNaviera(firstCard, nav[0]?.name || '');
 }
 
 
@@ -1061,7 +1113,7 @@ async function enviarDatos() {
     quiereTraslados:   document.querySelector('[onclick*="traslados"]')?.classList.contains('sel') || false,
     quiereExcursiones: document.querySelector('[onclick*="excursiones"]')?.classList.contains('sel') || false,
     quiereBebidas:     document.querySelector('#panel-bebidas').classList.contains('open'),
-    navieraConsultada: navieraEl ? navieraEl.textContent : '—',
+    navieraConsultada: window._navieraSeleccionada || (navieraEl ? navieraEl.textContent : '—'),
     llamadaAgendada:   false,
     linkCalendly:      'https://calendly.com/viajerosenaltamar',
   };

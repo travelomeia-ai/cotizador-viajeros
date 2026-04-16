@@ -638,9 +638,9 @@ body {
         <div style="flex:1">
           <div class="cc-title">Vuelos desde mi ciudad</div>
           <div class="cc-sub">Te generamos un link con las mejores opciones en Google Flights para tu fecha y ruta</div>
-          <div class="sub-panel open" id="panel-vuelos">
+          <div class="sub-panel open" id="panel-vuelos" onclick="event.stopPropagation()">
             <div class="field-label">¿Desde qué ciudad salís?</div>
-            <input class="field-input" type="text" placeholder="Ej: Buenos Aires, Córdoba, Montevideo..." id="input-ciudad"/>
+            <input class="field-input" type="text" placeholder="Ej: Buenos Aires, Córdoba, Montevideo..." id="input-ciudad" onclick="event.stopPropagation()" oninput="event.stopPropagation()"/>
             <div style="font-size:11px;color:var(--text-light);margin-top:6px;">Recibís el link de Google Flights ya armado con tu ruta y fecha al terminar el cotizador.</div>
           </div>
         </div>
@@ -651,18 +651,18 @@ body {
         <div style="flex:1">
           <div class="cc-title">Estadía pre/post crucero</div>
           <div class="cc-sub">Muy recomendado llegar un día antes y quedarse uno después</div>
-          <div class="sub-panel open" id="panel-hotel">
+          <div class="sub-panel open" id="panel-hotel" onclick="event.stopPropagation()">
             <div class="field-label" style="margin-bottom:8px;">¿Cuántas noches necesitás?</div>
             <div class="pill-wrap" style="margin-bottom:12px;">
-              <div class="pill sel" onclick="soloP(this,'noches-hotel')">1 noche</div>
-              <div class="pill" onclick="soloP(this,'noches-hotel')">2 noches</div>
-              <div class="pill" onclick="soloP(this,'noches-hotel')">3 o más</div>
+              <div class="pill sel" onclick="soloP(this,'noches-hotel',event)">1 noche</div>
+              <div class="pill" onclick="soloP(this,'noches-hotel',event)">2 noches</div>
+              <div class="pill" onclick="soloP(this,'noches-hotel',event)">3 o más</div>
             </div>
             <div class="field-label" style="margin-bottom:8px;">Presupuesto por noche</div>
             <div class="pill-wrap">
-              <div class="pill" onclick="soloP(this,'precio-hotel')">Hasta USD 100</div>
-              <div class="pill sel" onclick="soloP(this,'precio-hotel')">USD 100–200</div>
-              <div class="pill" onclick="soloP(this,'precio-hotel')">USD 200+</div>
+              <div class="pill" onclick="soloP(this,'precio-hotel',event)">Hasta USD 100</div>
+              <div class="pill sel" onclick="soloP(this,'precio-hotel',event)">USD 100–200</div>
+              <div class="pill" onclick="soloP(this,'precio-hotel',event)">USD 200+</div>
             </div>
           </div>
         </div>
@@ -691,7 +691,7 @@ body {
         <div style="flex:1">
           <div class="cc-title">Paquete de bebidas a bordo</div>
           <div class="cc-sub">Disponible según naviera — lo vemos juntos en tu llamada</div>
-          <div class="sub-panel" id="panel-bebidas">
+          <div class="sub-panel" id="panel-bebidas" onclick="event.stopPropagation()">
             <div class="info-box green" style="margin:0;">
               ¡Buena elección! El precio del paquete varía según la naviera que elijas — por eso lo cotizamos juntos en tu llamada, así sabés exactamente qué incluye y cuánto sale antes de decidir.
             </div>
@@ -992,11 +992,10 @@ function selVisa(el, val) {
 }
 
 // PILLS
-function soloP(el, grupo) {
-  // Find pills with exact grupo match using Array.from + filter
+function soloP(el, grupo, event) {
+  if (event) event.stopPropagation();
   const allPills = Array.from(document.querySelectorAll('.pill')).filter(p => {
     const oc = p.getAttribute('onclick') || '';
-    // Extract the grupo argument from onclick="soloP(this,'GRUPO')"
     const match = oc.match(/soloP\(this,'([^']+)'\)/);
     return match && match[1] === grupo;
   });

@@ -993,8 +993,13 @@ function selVisa(el, val) {
 
 // PILLS
 function soloP(el, grupo) {
-  // Find all pills with same grupo within same container
-  const allPills = document.querySelectorAll(`.pill[onclick*="${grupo}"]`);
+  // Find pills with exact grupo match using Array.from + filter
+  const allPills = Array.from(document.querySelectorAll('.pill')).filter(p => {
+    const oc = p.getAttribute('onclick') || '';
+    // Extract the grupo argument from onclick="soloP(this,'GRUPO')"
+    const match = oc.match(/soloP\(this,'([^']+)'\)/);
+    return match && match[1] === grupo;
+  });
   allPills.forEach(p => p.classList.remove('sel'));
   el.classList.add('sel');
 }

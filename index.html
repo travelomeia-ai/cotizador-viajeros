@@ -499,11 +499,11 @@ body {
 
       <div class="sec-label">Motivo del viaje</div>
       <div class="pill-wrap">
-        <div class="pill sel" onclick="soloP(this,'motivo')">Vacaciones</div>
-        <div class="pill" onclick="soloP(this,'motivo')">Luna de miel</div>
-        <div class="pill" onclick="soloP(this,'motivo')">Aniversario</div>
-        <div class="pill" onclick="soloP(this,'motivo')">Cumpleaños especial</div>
-        <div class="pill" onclick="soloP(this,'motivo')">Primera vez en crucero</div>
+        <div class="pill sel" data-grupo="motivo" onclick="soloP(this,'motivo')">Vacaciones</div>
+        <div class="pill" data-grupo="motivo" onclick="soloP(this,'motivo')">Luna de miel</div>
+        <div class="pill" data-grupo="motivo" onclick="soloP(this,'motivo')">Aniversario</div>
+        <div class="pill" data-grupo="motivo" onclick="soloP(this,'motivo')">Cumpleaños especial</div>
+        <div class="pill" data-grupo="motivo" onclick="soloP(this,'motivo')">Primera vez en crucero</div>
       </div>
 
       <button class="btn-primary" onclick="ir(2)">Continuar →</button>
@@ -553,27 +553,27 @@ body {
 
       <div class="sec-label">Mes aproximado de salida</div>
       <div class="pill-wrap" id="meses">
-        <div class="pill" onclick="soloP(this,'mes')">Ene</div>
-        <div class="pill" onclick="soloP(this,'mes')">Feb</div>
-        <div class="pill" onclick="soloP(this,'mes')">Mar</div>
-        <div class="pill" onclick="soloP(this,'mes')">Abr</div>
-        <div class="pill" onclick="soloP(this,'mes')">May</div>
-        <div class="pill" onclick="soloP(this,'mes')">Jun</div>
-        <div class="pill sel" onclick="soloP(this,'mes')">Jul</div>
-        <div class="pill" onclick="soloP(this,'mes')">Ago</div>
-        <div class="pill" onclick="soloP(this,'mes')">Sep</div>
-        <div class="pill" onclick="soloP(this,'mes')">Oct</div>
-        <div class="pill" onclick="soloP(this,'mes')">Nov</div>
-        <div class="pill" onclick="soloP(this,'mes')">Dic</div>
-        <div class="pill" onclick="soloP(this,'mes')">Soy flexible</div>
+        <div class="pill" data-grupo="mes" onclick="soloP(this,'mes')">Ene</div>
+        <div class="pill" data-grupo="mes" onclick="soloP(this,'mes')">Feb</div>
+        <div class="pill" data-grupo="mes" onclick="soloP(this,'mes')">Mar</div>
+        <div class="pill" data-grupo="mes" onclick="soloP(this,'mes')">Abr</div>
+        <div class="pill" data-grupo="mes" onclick="soloP(this,'mes')">May</div>
+        <div class="pill" data-grupo="mes" onclick="soloP(this,'mes')">Jun</div>
+        <div class="pill sel" data-grupo="mes" onclick="soloP(this,'mes')">Jul</div>
+        <div class="pill" data-grupo="mes" onclick="soloP(this,'mes')">Ago</div>
+        <div class="pill" data-grupo="mes" onclick="soloP(this,'mes')">Sep</div>
+        <div class="pill" data-grupo="mes" onclick="soloP(this,'mes')">Oct</div>
+        <div class="pill" data-grupo="mes" onclick="soloP(this,'mes')">Nov</div>
+        <div class="pill" data-grupo="mes" onclick="soloP(this,'mes')">Dic</div>
+        <div class="pill" data-grupo="mes" onclick="soloP(this,'mes')">Soy flexible</div>
       </div>
 
       <div class="sec-label">Cantidad de noches</div>
       <div class="pill-wrap">
-        <div class="pill" onclick="soloP(this,'noches')">3 a 4</div>
-        <div class="pill sel" onclick="soloP(this,'noches')">5 a 7</div>
-        <div class="pill" onclick="soloP(this,'noches')">8 a 12</div>
-        <div class="pill" onclick="soloP(this,'noches')">13 o más</div>
+        <div class="pill" data-grupo="noches" onclick="soloP(this,'noches')">3 a 4</div>
+        <div class="pill sel" data-grupo="noches" onclick="soloP(this,'noches')">5 a 7</div>
+        <div class="pill" data-grupo="noches" onclick="soloP(this,'noches')">8 a 12</div>
+        <div class="pill" data-grupo="noches" onclick="soloP(this,'noches')">13 o más</div>
       </div>
 
       <div class="info-box gold" style="margin-top:16px;">
@@ -633,37 +633,41 @@ body {
 
       <div class="sec-label">Servicios adicionales</div>
 
-      <div class="check-card sel" onclick="toggleCC(this,'vuelos')">
-        <div class="check-box"><svg class="chk" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div style="flex:1">
-          <div class="cc-title">Vuelos desde mi ciudad</div>
-          <div class="cc-sub">Te generamos un link con las mejores opciones en Google Flights para tu fecha y ruta</div>
-          <div class="sub-panel open" id="panel-vuelos" onclick="event.stopPropagation()">
-            <div class="field-label">¿Desde qué ciudad salís?</div>
-            <input class="field-input" type="text" placeholder="Ej: Buenos Aires, Córdoba, Montevideo..." id="input-ciudad" onclick="event.stopPropagation()" oninput="event.stopPropagation()"/>
-            <div style="font-size:11px;color:var(--text-light);margin-top:6px;">Recibís el link de Google Flights ya armado con tu ruta y fecha al terminar el cotizador.</div>
+      <div class="check-card sel" id="card-vuelos">
+        <div style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;" onclick="toggleCC(document.getElementById('card-vuelos'),'vuelos')">
+          <div class="check-box"><svg class="chk" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="cc-title">Vuelos desde mi ciudad</div>
+            <div class="cc-sub">Te generamos un link con las mejores opciones en Google Flights para tu fecha y ruta</div>
           </div>
+        </div>
+        <div class="sub-panel open" id="panel-vuelos" style="margin-left:32px;">
+          <div class="field-label">¿Desde qué ciudad salís?</div>
+          <input class="field-input" type="text" placeholder="Ej: Buenos Aires, Córdoba, Montevideo..." id="input-ciudad"/>
+          <div style="font-size:11px;color:var(--text-light);margin-top:6px;">Recibís el link de Google Flights ya armado con tu ruta y fecha al terminar el cotizador.</div>
         </div>
       </div>
 
-      <div class="check-card sel" onclick="toggleCC(this,'hotel')">
-        <div class="check-box"><svg class="chk" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div style="flex:1">
-          <div class="cc-title">Estadía pre/post crucero</div>
-          <div class="cc-sub">Muy recomendado llegar un día antes y quedarse uno después</div>
-          <div class="sub-panel open" id="panel-hotel" onclick="event.stopPropagation()">
-            <div class="field-label" style="margin-bottom:8px;">¿Cuántas noches necesitás?</div>
-            <div class="pill-wrap" style="margin-bottom:12px;">
-              <div class="pill sel" onclick="soloP(this,'noches-hotel',event)">1 noche</div>
-              <div class="pill" onclick="soloP(this,'noches-hotel',event)">2 noches</div>
-              <div class="pill" onclick="soloP(this,'noches-hotel',event)">3 o más</div>
-            </div>
-            <div class="field-label" style="margin-bottom:8px;">Presupuesto por noche</div>
-            <div class="pill-wrap">
-              <div class="pill" onclick="soloP(this,'precio-hotel',event)">Hasta USD 100</div>
-              <div class="pill sel" onclick="soloP(this,'precio-hotel',event)">USD 100–200</div>
-              <div class="pill" onclick="soloP(this,'precio-hotel',event)">USD 200+</div>
-            </div>
+      <div class="check-card sel" id="card-hotel">
+        <div style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;" onclick="toggleCC(document.getElementById('card-hotel'),'hotel')">
+          <div class="check-box"><svg class="chk" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="cc-title">Estadía pre/post crucero</div>
+            <div class="cc-sub">Muy recomendado llegar un día antes y quedarse uno después</div>
+          </div>
+        </div>
+        <div class="sub-panel open" id="panel-hotel" style="margin-left:32px;">
+          <div class="field-label" style="margin-bottom:8px;">¿Cuántas noches necesitás?</div>
+          <div class="pill-wrap" style="margin-bottom:12px;">
+            <div class="pill sel" data-grupo="noches-hotel" onclick="soloP(this,'noches-hotel')">1 noche</div>
+            <div class="pill" data-grupo="noches-hotel" onclick="soloP(this,'noches-hotel')">2 noches</div>
+            <div class="pill" data-grupo="noches-hotel" onclick="soloP(this,'noches-hotel')">3 o más</div>
+          </div>
+          <div class="field-label" style="margin-bottom:8px;">Presupuesto por noche</div>
+          <div class="pill-wrap">
+            <div class="pill" data-grupo="precio-hotel" onclick="soloP(this,'precio-hotel')">Hasta USD 100</div>
+            <div class="pill sel" data-grupo="precio-hotel" onclick="soloP(this,'precio-hotel')">USD 100–200</div>
+            <div class="pill" data-grupo="precio-hotel" onclick="soloP(this,'precio-hotel')">USD 200+</div>
           </div>
         </div>
       </div>
@@ -686,15 +690,17 @@ body {
 
       <div class="sec-label">Experiencia a bordo</div>
 
-      <div class="check-card" onclick="toggleCC(this,'bebidas')">
-        <div class="check-box"><svg class="chk" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div style="flex:1">
-          <div class="cc-title">Paquete de bebidas a bordo</div>
-          <div class="cc-sub">Disponible según naviera — lo vemos juntos en tu llamada</div>
-          <div class="sub-panel" id="panel-bebidas" onclick="event.stopPropagation()">
-            <div class="info-box green" style="margin:0;">
-              ¡Buena elección! El precio del paquete varía según la naviera que elijas — por eso lo cotizamos juntos en tu llamada, así sabés exactamente qué incluye y cuánto sale antes de decidir.
-            </div>
+      <div class="check-card" id="card-bebidas">
+        <div style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;" onclick="toggleCC(document.getElementById('card-bebidas'),'bebidas')">
+          <div class="check-box"><svg class="chk" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="cc-title">Paquete de bebidas a bordo</div>
+            <div class="cc-sub">Disponible según naviera — lo vemos juntos en tu llamada</div>
+          </div>
+        </div>
+        <div class="sub-panel" id="panel-bebidas" style="margin-left:32px;">
+          <div class="info-box green" style="margin:0;">
+            ¡Buena elección! El precio del paquete varía según la naviera que elijas — por eso lo cotizamos juntos en tu llamada, así sabés exactamente qué incluye y cuánto sale antes de decidir.
           </div>
         </div>
       </div>
@@ -992,14 +998,8 @@ function selVisa(el, val) {
 }
 
 // PILLS
-function soloP(el, grupo, event) {
-  if (event) event.stopPropagation();
-  const allPills = Array.from(document.querySelectorAll('.pill')).filter(p => {
-    const oc = p.getAttribute('onclick') || '';
-    const match = oc.match(/soloP\(this,'([^']+)'\)/);
-    return match && match[1] === grupo;
-  });
-  allPills.forEach(p => p.classList.remove('sel'));
+function soloP(el, grupo) {
+  document.querySelectorAll(`.pill[data-grupo="${grupo}"]`).forEach(p => p.classList.remove('sel'));
   el.classList.add('sel');
 }
 
@@ -1008,6 +1008,9 @@ function toggleCC(el, id) {
   el.classList.toggle('sel');
   const panel = document.getElementById('panel-' + id);
   if (panel) panel.classList.toggle('open', el.classList.contains('sel'));
+  // Sync checkbox visual
+  const box = el.querySelector('.check-box');
+  if (box) box.style.background = el.classList.contains('sel') ? 'var(--ocean)' : '';
 }
 
 function selNaviera(el, nombre) {

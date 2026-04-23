@@ -758,47 +758,11 @@ body {
     <div class="card">
       <div class="step-label">¡Último paso!</div>
       <div class="step-title">Agendá tu llamada con nosotros</div>
-      <div class="step-sub">Elegí el día y el horario que mejor te quede. La llamada dura aproximadamente 30 minutos y es sin compromiso.</div>
+      <div class="step-sub">Elegí el día y el horario que mejor te quede. La llamada dura 30 minutos y es sin compromiso.</div>
 
-      <div class="cal-wrap" id="cal-section">
-        <div class="cal-head">
-          <div class="cal-avatar">RM</div>
-          <div>
-            <div class="cal-name">Rocío y Matías</div>
-            <div class="cal-detail">Viajeros en Alta Mar · 30 min · Video o WhatsApp</div>
-          </div>
-        </div>
-        <div class="cal-body">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-            <span style="font-size:13px;font-weight:500;color:var(--navy);">Mayo 2026</span>
-            <div style="display:flex;gap:6px;">
-              <button style="background:none;border:1px solid rgba(10,22,40,0.15);border-radius:6px;width:28px;height:28px;cursor:pointer;color:var(--text-mid);font-size:14px;">‹</button>
-              <button style="background:none;border:1px solid rgba(10,22,40,0.15);border-radius:6px;width:28px;height:28px;cursor:pointer;color:var(--text-mid);font-size:14px;">›</button>
-            </div>
-          </div>
-          <div class="cal-grid">
-            <div class="cal-dh">Lu</div><div class="cal-dh">Ma</div><div class="cal-dh">Mi</div><div class="cal-dh">Ju</div><div class="cal-dh">Vi</div><div class="cal-dh">Sá</div><div class="cal-dh">Do</div>
-            <div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d avail" onclick="selDay(this)">1</div><div class="cal-d avail" onclick="selDay(this)">2</div><div class="cal-d">3</div><div class="cal-d">4</div>
-            <div class="cal-d avail" onclick="selDay(this)">5</div><div class="cal-d avail" onclick="selDay(this)">6</div><div class="cal-d avail" onclick="selDay(this)">7</div><div class="cal-d avail" onclick="selDay(this)">8</div><div class="cal-d avail" onclick="selDay(this)">9</div><div class="cal-d">10</div><div class="cal-d">11</div>
-            <div class="cal-d avail" onclick="selDay(this)">12</div><div class="cal-d avail sel-day" onclick="selDay(this)">13</div><div class="cal-d avail" onclick="selDay(this)">14</div><div class="cal-d avail" onclick="selDay(this)">15</div><div class="cal-d avail" onclick="selDay(this)">16</div><div class="cal-d">17</div><div class="cal-d">18</div>
-            <div class="cal-d avail" onclick="selDay(this)">19</div><div class="cal-d avail" onclick="selDay(this)">20</div><div class="cal-d avail" onclick="selDay(this)">21</div><div class="cal-d avail" onclick="selDay(this)">22</div><div class="cal-d avail" onclick="selDay(this)">23</div><div class="cal-d">24</div><div class="cal-d">25</div>
-          </div>
-          <div class="field-label" style="margin-bottom:8px;">Horarios disponibles — martes 13 de mayo</div>
-          <div class="time-slot" onclick="selTime(this)"><span>10:00 AM</span><span class="time-tz">Argentina (GMT-3)</span></div>
-          <div class="time-slot" onclick="selTime(this)"><span>11:30 AM</span><span class="time-tz">Argentina (GMT-3)</span></div>
-          <div class="time-slot sel-time" onclick="selTime(this)"><span>3:00 PM</span><span class="time-tz">Seleccionado</span></div>
-          <div class="time-slot" onclick="selTime(this)"><span>5:00 PM</span><span class="time-tz">Argentina (GMT-3)</span></div>
-          <button class="btn-primary" onclick="confirmar()">Confirmar — martes 13 de mayo a las 3:00 PM</button>
-        </div>
-      </div>
-
-      <div class="confirm-wrap" id="confirm-panel">
-        <div class="confirm-icon">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M6 14L11 19L22 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="confirm-title">¡Listo! Tu llamada está agendada</div>
-        <div class="confirm-sub" style="margin-bottom:4px;">Martes 13 de mayo · 3:00 PM (Argentina)</div>
-        <div class="confirm-sub">Te mandamos la confirmación por email con el link de la videollamada.</div>
+      <!-- Calendly embed -->
+      <div id="calendly-container" style="min-width:280px;height:650px;margin-bottom:20px;">
+        <div class="calendly-inline-widget" data-url="https://calendly.com/travelomeia/consulta-de-crucero---viajeros-en-alta-mar?hide_gdpr_banner=1&primary_color=1a4a6b" style="min-width:280px;height:650px;"></div>
       </div>
 
       <div style="background:var(--sand);border-radius:var(--radius);padding:16px 20px;">
@@ -1173,5 +1137,6 @@ async function enviarDatos() {
 actualizarProg();
 actualizarLabels();
 </script>
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 </body>
 </html>
